@@ -23,6 +23,9 @@
         <nav x-data="{ selected: $persist('Dashboard') }">
 
             @include('livewire.menu.dashboard.index')
+
+            @include('livewire.menu.hr.index')
+
            
             @if (auth()->user()->mode === 'admin' || auth()->user()->mode === 'billing'|| auth()->user()->mode === 'accounts')
             @include('livewire.menu.admin.index')

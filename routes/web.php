@@ -83,6 +83,18 @@ use App\Livewire\Dispatch\DispatchItem as DispatchDispatchItem;
 use App\Http\Controllers\MisReports\SalesDatewiseReportPrintController;
 use Illuminate\Http\Request;
 
+// HR Livewire Components
+use App\Livewire\Hr\Payroll;
+use App\Livewire\Hr\Attendance;
+use App\Livewire\Hr\Employee;
+use App\Livewire\Hr\Deduction;
+use App\Livewire\Hr\Position;
+use App\Livewire\Hr\Schedule;
+use App\Livewire\Hr\HrDashboard;
+use App\Livewire\Hr\Overtime;
+use App\Livewire\Hr\CashAdvance;
+use App\Livewire\Hr\ScheduleManagement;
+
 // Route::get('/dot-matrix-print',DotMatrixPrint::class)
 //     ->name('dotmatrix.print');
 
@@ -226,25 +238,42 @@ Route::middleware([
     Route::get('/check-management/create', CheckCreate::class)->name('check-management.create');
 
 
+    // HR Routes
+    Route::get('/hr-dashboard', HrDashboard::class)->name('hr.dashboard');
+    Route::get('/payroll', Payroll::class)->name('payroll.index');
+    Route::get('/payroll/generate', Payroll::class)->name('payroll.generate');
+    Route::get('/attendance', Attendance::class)->name('attendance.index');
+
+    Route::get('/employees', Employee::class)->name('employees.index');
+    Route::get('/overtime', Overtime::class)->name('overtime.index');
+    Route::get('/cash-advance', CashAdvance::class)->name('cash-advance.index');
+    Route::get('/schedules', Schedule::class)->name('schedules.index');
+
+    Route::get('/deductions', Deduction::class)->name('deductions.index');
+    Route::get('/positions', Position::class)->name('positions.index');
+    Route::get('/schedule-management', ScheduleManagement::class)->name('schedule-management.index');
+
+
+
 
 
     Route::get('/check-management/print', function (Request $request) {
-    $ids = $request->input('ids');  // Changed from query() to input()
-    $id = $request->input('id');    // Changed from query() to input()
+        $ids = $request->input('ids');  // Changed from query() to input()
+        $id = $request->input('id');    // Changed from query() to input()
 
-    if ($id) {
-        $cheques = PostdatedCheque::with(['customer', 'paidInvoices.invoice'])
-            ->where('id', $id)
-            ->get();
-    } else {
-        $ids = explode(',', $ids);
-        $cheques = PostdatedCheque::with(['customer', 'paidInvoices.invoice'])
-            ->whereIn('id', $ids)
-            ->get();
-    }
+        if ($id) {
+            $cheques = PostdatedCheque::with(['customer', 'paidInvoices.invoice'])
+                ->where('id', $id)
+                ->get();
+        } else {
+            $ids = explode(',', $ids);
+            $cheques = PostdatedCheque::with(['customer', 'paidInvoices.invoice'])
+                ->whereIn('id', $ids)
+                ->get();
+        }
 
-    return view('livewire.check-management.print', ['cheques' => $cheques]);
-})->name('check-management.print');
+        return view('livewire.check-management.print', ['cheques' => $cheques]);
+    })->name('check-management.print');
 
 
 
